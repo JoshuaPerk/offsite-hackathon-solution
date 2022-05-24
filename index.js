@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const ngrok = require('ngrok')
 const {
     getDriftContact,
     getDomainFromEmail,
@@ -12,8 +13,10 @@ const {
 } = require('./utils')
 
 // Setup the app
+const port = 8080
 const app = express()
 app.use(bodyParser.json())
+ngrok.connect(port).then(url => console.log(`Your app is running here: ${url}`))
 
 // When a button is clicked (in reality, might use contact_identified — not sure if this gets fired when a contact is identified via integration ie. MAP)
 app.post('/', async (req, res) => {
@@ -34,6 +37,10 @@ app.post('/', async (req, res) => {
     }
 })
 
-app.listen(8080)
-// Terminal 1: npm run start
-// Terminal 2: ngrok http 8080
+// Ignore! Just a test to ensure the app is running via NGROK (open in browser to test)
+app.get('/', async (req, res) => {
+    res.send('Hello world!')
+})
+
+app.listen(port)
+// Terminal: npm run start
